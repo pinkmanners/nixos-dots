@@ -1,50 +1,55 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{ lib
+, stdenvNoCC
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mocu-cursors";
-  version = "2024-12-01";
+  version = "custom";
 
-  src = fetchFromGitHub {
-    owner = "charakterziffer";
-    repo = "cursor-toolbox";
-    rev = "main";  # Pin to specific commit on first build
-    sha256 = lib.fakeSha256;  # Update on first build
-  };
+  # Placeholder - you'll add your custom cursor files to these directories
+  src = ./src;
 
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share/icons
-    mkdir -p $out/share/cursors
+    runHook preInstall
 
-    # Install X cursor themes
-    if [ -d "build/xcursor" ]; then
-      cp -r build/xcursor/Mocu-Black-Left-X $out/share/icons/
-      cp -r build/xcursor/Mocu-White-Left-X $out/share/icons/
-      cp -r build/xcursor/Mocu-Black-Right-X $out/share/icons/
-      cp -r build/xcursor/Mocu-White-Right-X $out/share/icons/
+    mkdir -p $out/share/icons
+
+    # Install Hyprcursor variants (for Wayland/Hyprland)
+    if [ -d "hyprcursor" ]; then
+      echo "Installing Hyprcursor themes..."
+      for theme in hyprcursor/Mocu-*; do
+        if [ -d "$theme" ]; then
+          theme_name=$(basename "$theme")
+          echo "  - Installing $theme_name"
+          cp -r "$theme" $out/share/icons/
+        fi
+      done
     fi
 
-    # Install Hyprcursor themes
-    if [ -d "build/hyprcursor" ]; then
-      cp -r build/hyprcursor/Mocu-Black-Left-H $out/share/cursors/
-      cp -r build/hyprcursor/Mocu-White-Left-H $out/share/cursors/
-      cp -r build/hyprcursor/Mocu-Black-Right-H $out/share/cursors/
-      cp -r build/hyprcursor/Mocu-White-Right-H $out/share/cursors/
+    # Install XCursor variants (for X11/LeftWM)
+    if [ -d "xcursor" ]; then
+      echo "Installing XCursor themes..."
+      for theme in xcursor/Mocu-*; do
+        if [ -d "$theme" ]; then
+          theme_name=$(basename "$theme")
+          echo "  - Installing $theme_name"
+          cp -r "$theme" $out/share/icons/
+        fi
+      done
     fi
 
     # Ensure proper permissions
-    chmod -R 755 $out/share/icons
-    chmod -R 755 $out/share/cursors
+    find $out/share/icons -type f -exec chmod 644 {} \;
+    find $out/share/icons -type d -exec chmod 755 {} \;
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Mocu cursor themes for X11 and Wayland (Hyprcursor)";
-    homepage = "https://github.com/charakterziffer/cursor-toolbox";
-    license = licenses.cc-by-40;
+    description = "Mocu custom cursor themes for Hyprland and X11";
+    license = licenses.unfree; # Adjust based on your cursor license
     platforms = platforms.linux;
     maintainers = [ ];
   };

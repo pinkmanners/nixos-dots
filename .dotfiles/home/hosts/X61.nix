@@ -71,7 +71,7 @@
 
       # Custom settings
       unsetopt nomatch
-      
+
       # Run fastfetch on shell start
       fastfetch --logo Xenia
     '';
@@ -80,14 +80,14 @@
     shellAliases = {
       # Navigation
       cd.. = "cd ..";
-      
+
       # List with lsd
       lsd = "lsd -l";
-      
+
       # Quick commands
       q = "exit";
       c = "clear";
-      
+
       # NixOS specific
       flakeUpdate = "nix flake update";
       rebuildSwitch = "sudo nixos-rebuild switch --flake /home/jayden/.dotfiles/#X61";
@@ -149,15 +149,15 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
-    
+
     plugins = with pkgs.vimPlugins; [
       # Theme
       catppuccin-nvim
-      
+
       # Status line
       vim-airline
       vim-airline-themes
-      
+
       # Kitty integration
       vim-kitty
     ];
@@ -182,67 +182,67 @@
     wsjtx
     xlog
     cqrlog
-    
+
     # ==== DEVELOPMENT ====
     # Note: Lapce as lighter alternative to other editors
     lapce
-    
+
     # ==== SHARED GUI APPS (minimal set) ====
     # File managers
     thunar
     xarchiver
-    
+
     # Terminals
     terminator
-    
+
     # Text editors
     gedit
-    
+
     # Utilities
     catfish
     gpick
     gparted
     gnome.gnome-disk-utility
-    
+
     # VPN
     mullvad-vpn
-    
+
     # Browsers
     mullvad-browser
-    
+
     # Media players
     rhythmbox
     tenacity
     audacity
     vlc
     ristretto
-    
+
     # Graphics
     gimp
-    
+
     # Document viewer
     gnome.gnome-font-viewer
     papers
-    
+
     # Text editor
     eloquent
     zed-editor
-    
+
     # Downloader
     raider
-    
+
     # Password manager
     bitwarden
-    
+
     # Torrent client
     transmission_4-gtk
-    
+
     # Office suite
     libreoffice-fresh
-    
+
     # Compression
     p7zip
-    
+
     # Video codecs
     ffmpeg
   ];
@@ -250,35 +250,35 @@
   # ===== GTK THEMING =====
   gtk = {
     enable = true;
-    
+
     theme = {
       name = "Catppuccin-Macchiato-Standard-Mauve-Dark";
-      package = pkgs.catppuccin-gtk.override {
+      package = pkgs.magnetic-catppuccin-gtk {
         accents = [ "mauve" ];
         variant = "macchiato";
       };
     };
-    
+
     iconTheme = {
       name = "Flatery-Red-Dark";
       package = pkgs.flatery-icon-theme;
     };
-    
+
     cursorTheme = {
       name = "Mocu-Black-Left-X";
       package = pkgs.mocu-cursors;
-      size = 24;
+      size = 32;
     };
-    
+
     font = {
       name = "SpaceMono Nerd Font";
-      size = 11;
+      size = 12;
     };
-    
+
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };
-    
+
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };
@@ -303,20 +303,19 @@
   # ===== XDG =====
   xdg = {
     enable = true;
-    
+
     userDirs = {
       enable = true;
       createDirectories = true;
+      developer = "${config.home.homeDirectory}/Developer";
       desktop = "${config.home.homeDirectory}/Desktop";
       documents = "${config.home.homeDirectory}/Documents";
       download = "${config.home.homeDirectory}/Downloads";
       music = "${config.home.homeDirectory}/Music";
       pictures = "${config.home.homeDirectory}/Pictures";
       videos = "${config.home.homeDirectory}/Videos";
-      templates = "${config.home.homeDirectory}/Templates";
-      publicShare = "${config.home.homeDirectory}/Public";
     };
-    
+
     mimeApps = {
       enable = true;
       defaultApplications = {

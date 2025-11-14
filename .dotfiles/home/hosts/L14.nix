@@ -20,12 +20,12 @@
     ../bin/hyprland/default.nix
     ../bin/ashell/default.nix
     ../bin/moxnotify/default.nix
-    
+
     # X11/LeftWM stack
     ../bin/leftwm/default.nix
     ../bin/xmobar/default.nix
     ../bin/wired-notify/default.nix
-    
+
     # Shared
     ../bin/rlaunch/default.nix
     ../bin/kitty/default.nix
@@ -79,7 +79,7 @@
 
       # Custom settings
       unsetopt nomatch
-      
+
       # Run fastfetch on shell start
       fastfetch --logo Xenia
     '';
@@ -88,14 +88,14 @@
     shellAliases = {
       # Navigation
       cd.. = "cd ..";
-      
+
       # List with lsd
       lsd = "lsd -l";
-      
+
       # Quick commands
       q = "exit";
       c = "clear";
-      
+
       # NixOS specific
       flakeUpdate = "nix flake update";
       rebuildSwitch = "sudo nixos-rebuild switch --flake /home/jayden/.dotfiles/#L14";
@@ -157,15 +157,15 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
-    
+
     plugins = with pkgs.vimPlugins; [
       # Theme
       catppuccin-nvim
-      
+
       # Status line
       vim-airline
       vim-airline-themes
-      
+
       # Kitty integration
       vim-kitty
     ];
@@ -188,105 +188,105 @@
   home.packages = with pkgs; [
     # ==== GAMING & EMULATION ====
     prismlauncher
-    
+
     # ==== MEDIA & CREATIVE ====
     # Photo/Image tools
     darktable
     xnconvert
     inkscape
     krita
-    
+
     # Video tools
     media-downloader
     handbrake
     mpv
-    
+
     # Audio tools
     strawberry
     soundconverter
-    
+
     # Music streaming
     tidal-hifi
-    
+
     # Media server
     plexdesktop
-    
+
     # ==== UTILITIES ====
     # Web browser
     brave
-    
+
     # Download tool
     yt-dlp
-    
+
     # Communication
     telegram-desktop
-    
+
     # Archive tools
     poweriso
     peazip
-    
+
     # Office suite
     onlyoffice-bin
-    
+
     # Note taking
     logseq
-    
+
     # ==== SHARED GUI APPS ====
     # File managers
     thunar
     xarchiver
-    
+
     # Terminals
     terminator
-    
+
     # Text editors
     gedit
-    
+
     # Utilities
     catfish
     gpick
     gparted
     gnome.gnome-disk-utility
-    
+
     # VPN
     mullvad-vpn
-    
+
     # Browsers
     mullvad-browser
-    
+
     # Media players
     rhythmbox
     tenacity
     audacity
     vlc
     ristretto
-    
+
     # Graphics
     gimp
-    
+
     # Document viewer
     gnome.gnome-font-viewer
     papers
-    
+
     # Text editor
     eloquent
     zed-editor
-    
+
     # Downloader
     raider
-    
+
     # Password manager
     bitwarden
-    
+
     # Torrent client
     transmission_4-gtk
-    
+
     # Office suite (shared)
     libreoffice-fresh
-    
+
     # Compression
     p7zip
-    
+
     # Video codecs
     ffmpeg
   ];
@@ -294,35 +294,35 @@
   # ===== GTK THEMING =====
   gtk = {
     enable = true;
-    
+
     theme = {
       name = "Catppuccin-Macchiato-Standard-Mauve-Dark";
-      package = pkgs.catppuccin-gtk.override {
+      package = pkgs.magnetic-catppuccin-gtk {
         accents = [ "mauve" ];
         variant = "macchiato";
       };
     };
-    
+
     iconTheme = {
       name = "Flatery-Red-Dark";
       package = pkgs.flatery-icon-theme;
     };
-    
+
     cursorTheme = {
       name = "Mocu-White-Left-H";
       package = pkgs.mocu-cursors;
-      size = 24;
+      size = 32;
     };
-    
+
     font = {
       name = "SpaceMono Nerd Font";
-      size = 11;
+      size = 12;
     };
-    
+
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };
-    
+
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };
@@ -347,20 +347,19 @@
   # ===== XDG =====
   xdg = {
     enable = true;
-    
+
     userDirs = {
       enable = true;
       createDirectories = true;
+      developer = "${config.home.homeDirectory}/Developer";
       desktop = "${config.home.homeDirectory}/Desktop";
       documents = "${config.home.homeDirectory}/Documents";
       download = "${config.home.homeDirectory}/Downloads";
       music = "${config.home.homeDirectory}/Music";
       pictures = "${config.home.homeDirectory}/Pictures";
       videos = "${config.home.homeDirectory}/Videos";
-      templates = "${config.home.homeDirectory}/Templates";
-      publicShare = "${config.home.homeDirectory}/Public";
     };
-    
+
     mimeApps = {
       enable = true;
       defaultApplications = {
