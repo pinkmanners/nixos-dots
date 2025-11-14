@@ -128,6 +128,9 @@
 
   # Core system tools (GUI apps in home-manager)
   environment.systemPackages = with pkgs; [
+    # Home-manager CLI for standalone usage
+    home-manager
+
     # Build essentials
     gcc
     gnumake
@@ -169,6 +172,9 @@
 
     # NVIDIA settings
     nvidia-vaapi-driver
+
+    # Catppuccin SDDM theme
+    catppuccin-sddm
   ];
 
   # ===== FONTS =====

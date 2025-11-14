@@ -84,24 +84,11 @@
     enable = true;
     displayManager.sessionPackages = [ pkgs.leftwm ];
 
-    # Intel drivers for X11 (legacy i915)
-    videoDrivers = [ "modesetting" ];
-
     # Desktop environment settings
     desktopManager.xterm.enable = false;
 
     # Keyboard layout
     xkb.layout = "us";
-
-    # Touchpad support
-    libinput = {
-      enable = true;
-      touchpad = {
-        naturalScrolling = true;
-        tapping = true;
-        disableWhileTyping = true;
-      };
-    };
   };
 
   # ===== AUDIO =====
@@ -164,6 +151,9 @@
 
   # Core system tools (GUI apps in home-manager)
   environment.systemPackages = with pkgs; [
+    # Home-manager CLI for standalone usage
+    home-manager
+
     # Build essentials
     gcc
     gnumake
@@ -196,11 +186,14 @@
     # Network tools
     networkmanagerapplet
 
-    # Display/Graphics
+    # X11 tools
     xorg.xeyes  # For testing X11
 
     # Polkit agent
     polkit_gnome
+
+    # Catppuccin SDDM theme
+    catppuccin-sddm
   ];
 
   # ===== FONTS =====

@@ -78,36 +78,35 @@
 
   # ===== DISPLAY MANAGER =====
 
-  # SDDM on Wayland (will offer X11 sessions too)
+  # SDDM - supports both X11 and Wayland
   services.displayManager.sddm = {
     enable = true;
-    wayland.enable = true;
+    wayland.enable = true;  # Supports both X11 and Wayland sessions
     theme = "catppuccin-macchiato";
   };
 
-  # Enable both window managers
+  # X11 with LeftWM
+  services.xserver = {
+    enable = true;
+    displayManager.sessionPackages = [ pkgs.leftwm ];
+
+    # Desktop environment settings
+    desktopManager.xterm.enable = false;
+
+    # Keyboard layout
+    xkb.layout = "us";
+  };
+
+  # Hyprland from nixpkgs
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
   };
 
-  # X11 support for LeftWM
-  services.xserver = {
+  # XDG Desktop Portal
+  xdg.portal = {
     enable = true;
-    displayManager.sessionPackages = [ pkgs.leftwm ];
-
-    # Intel drivers for X11
-    videoDrivers = [ "modesetting" ];
-
-    # Touchpad support
-    libinput = {
-      enable = true;
-      touchpad = {
-        naturalScrolling = true;
-        tapping = true;
-        disableWhileTyping = true;
-      };
-    };
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
   # ===== AUDIO =====
@@ -126,17 +125,6 @@
 
   # NetworkManager applet support
   programs.nm-applet.enable = true;
-
-  # Printing support
-  services.printing.enable = true;
-  services.printing.drivers = with pkgs; [
-    gutenprint
-    gutenprintBin
-  ];
-
-  # Mullvad VPN
-  services.mullvad-vpn.enable = true;
-  services.mullvad-vpn.package = pkgs.mullvad-vpn;
 
   # Polkit authentication agent
   security.polkit.enable = true;
@@ -180,6 +168,9 @@
 
   # Core system tools (GUI apps in home-manager)
   environment.systemPackages = with pkgs; [
+    # Home-manager CLI for standalone usage
+    home-manager
+
     # Build essentials
     gcc
     gnumake
@@ -218,6 +209,9 @@
 
     # Polkit agent
     polkit_gnome
+
+    # Catppuccin SDDM theme
+    catppuccin-sddm
   ];
 
   # ===== FONTS =====

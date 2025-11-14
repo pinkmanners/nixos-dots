@@ -94,144 +94,233 @@
     # Desktop environment settings
     desktopManager.xterm.enable = false;
 
-    # Keyboard layout
-    xkb.layout = "us";
+    # E5430 Configuration
+    # Dell laptop for amateur radio
+    # Intel Core i5 3rd Gen Mobile
+    # X11 only (LeftWM)
+    # Always plugged in - optimized for battery longevity
 
-    # Touchpad support
-    libinput = {
-      enable = true;
-      touchpad = {
-        naturalScrolling = true;
-        tapping = true;
-        disableWhileTyping = true;
+    { config, lib, pkgs, hostname, ... }:
+
+    {
+      imports = [
+        ./hardware-configuration.nix
+      ];
+
+      # ===== SYSTEM BASICS =====
+
+      # Bootloader
+      boot.loader.systemd-boot.enable = true;
+      boot.loader.efi.canTouchEfiVariables = true;
+
+      # Hostname
+      networking.hostName = hostname;
+      networking.networkmanager.enable = true;
+
+      # Timezone and Locale
+      time.timeZone = "America/New_York";
+      i18n.defaultLocale = "en_US.UTF-8";
+      console.keyMap = "us";
+
+      # ===== HARDWARE SUPPORT =====
+
+      # Intel microcode
+      hardware.cpu.intel.updateMicrocode = true;
+
+      # Intel integrated graphics (i915)
+      hardware.graphics = {
+        enable = true;
+        enable32Bit = true;
+        extraPackages = with pkgs; [
+          intel-media-driver
+          intel-vaapi-driver
+          libvdpau-va-gl
+        ];
       };
-    };
-  };
 
-  # ===== AUDIO =====
+      # Enable OpenGL
+      hardware.opengl = {
+        enable = true;
+        driSupport = true;
+        driSupport32Bit = true;
+      };
 
-  # PipeWire with WirePlumber
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    wireplumber.enable = true;
-  };
+      # ===== POWER MANAGEMENT (TLP) =====
 
-  # ===== SYSTEM SERVICES =====
+      # Optimized for always-plugged-in use with battery longevity
+      services.tlp = {
+        enable = true;
+        settings = {
+          # Performance-oriented since always on AC
+          CPU_SCALING_GOVERNOR_ON_AC = "performance";
+          CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
 
-  # NetworkManager applet support
-  programs.nm-applet.enable = true;
+          # Critical: Battery charge thresholds for longevity
+          START_CHARGE_THRESH_BAT0 = 50;  # Start charging at 50%
+          STOP_CHARGE_THRESH_BAT0 = 80;   # Stop charging at 80%
 
-  # Polkit authentication agent
-  security.polkit.enable = true;
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
-    description = "polkit-gnome-authentication-agent-1";
-    wantedBy = [ "graphical-session.target" ];
-    wants = [ "graphical-session.target" ];
-    after = [ "graphical-session.target" ];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
-  };
+          # Optional: Limit max CPU performance to reduce heat
+          # CPU_MAX_PERF_ON_AC = 80;  # Uncomment if needed
 
-  # GNOME Keyring
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.sddm.enableGnomeKeyring = true;
+          # USB devices always available
+          USB_AUTOSUSPEND = 0;
 
-  # Automatic mounting of removable media
-  services.udisks2.enable = true;
+          # Keep performance consistent
+          RUNTIME_PM_ON_AC = "on";
+        };
+      };
 
-  # ===== USER ACCOUNT =====
+      # ===== DISPLAY MANAGER =====
 
-  users.users.jayden = {
-    isNormalUser = true;
-    description = "Jayden";
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-      "audio"
-      "video"
-      "input"
-      "dialout"  # For amateur radio serial devices
-    ];
-    shell = pkgs.zsh;
-  };
+      # SDDM on X11
+      services.displayManager.sddm = {
+        enable = true;
+        wayland.enable = false;  # X11 only
+        theme = "catppuccin-macchiato";
+      };
 
-  # ===== SYSTEM PACKAGES =====
+      # X11 with LeftWM
+      services.xserver = {
+        enable = true;
+        displayManager.sessionPackages = [ pkgs.leftwm ];
 
-  # Core system tools (GUI apps in home-manager)
-  environment.systemPackages = with pkgs; [
-    # Build essentials
-    gcc
-    gnumake
-    pkg-config
+        # Desktop environment settings
+        desktopManager.xterm.enable = false;
 
-    # Core utilities (using Rust alternatives where possible)
-    uutils-coreutils
-    git
-    wget
-    curl
+        # Keyboard layout
+        xkb.layout = "us";
+      };
 
-    # Editors
-    neovim
+      # ===== AUDIO =====
 
-    # Terminal tools
-    bat
-    fd
-    fzf
-    lsd
+      # PipeWire with WirePlumber
+      security.rtkit.enable = true;
+      services.pipewire = {
+        enable = true;
+        alsa.enable = true;
+        alsa.support32Bit = true;
+        pulse.enable = true;
+        wireplumber.enable = true;
+      };
 
-    # System monitoring
-    htop
-    btop
+      # ===== SYSTEM SERVICES =====
 
-    # File management
-    mc
-    yazi
-    xarchiver
+      # NetworkManager applet support
+      programs.nm-applet.enable = true;
 
-    # Network tools
-    networkmanagerapplet
+      # Polkit authentication agent
+      security.polkit.enable = true;
+      systemd.user.services.polkit-gnome-authentication-agent-1 = {
+        description = "polkit-gnome-authentication-agent-1";
+        wantedBy = [ "graphical-session.target" ];
+        wants = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+          Restart = "on-failure";
+          RestartSec = 1;
+          TimeoutStopSec = 10;
+        };
+      };
 
-    # Display/Graphics
-    xorg.xeyes  # For testing X11
+      # GNOME Keyring
+      services.gnome.gnome-keyring.enable = true;
+      security.pam.services.sddm.enableGnomeKeyring = true;
 
-    # Polkit agent
-    polkit_gnome
-  ];
+      # Automatic mounting of removable media
+      services.udisks2.enable = true;
 
-  # ===== FONTS =====
+      # ===== USER ACCOUNT =====
 
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "SpaceMono" ]; })
-  ];
+      users.users.jayden = {
+        isNormalUser = true;
+        description = "Jayden";
+        extraGroups = [
+          "wheel"
+          "networkmanager"
+          "audio"
+          "video"
+          "input"
+          "dialout"  # For amateur radio serial devices
+        ];
+        shell = pkgs.zsh;
+      };
 
-  # ===== SHELL CONFIGURATION =====
+      # ===== SYSTEM PACKAGES =====
 
-  # Enable Zsh system-wide but don't make it default
-  programs.zsh.enable = true;
+      # Core system tools (GUI apps in home-manager)
+      environment.systemPackages = with pkgs; [
+        # Home-manager CLI for standalone usage
+        home-manager
 
-  # Set default editor
-  environment.variables.EDITOR = "nvim";
+        # Build essentials
+        gcc
+        gnumake
+        pkg-config
 
-  # ===== NIX SETTINGS =====
+        # Core utilities (using Rust alternatives where possible)
+        uutils-coreutils
+        git
+        wget
+        curl
 
-  nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-    auto-optimise-store = true;
-  };
+        # Editors
+        neovim
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+        # Terminal tools
+        bat
+        fd
+        fzf
+        lsd
 
-  # ===== SYSTEM STATE VERSION =====
+        # System monitoring
+        htop
+        btop
 
-  system.stateVersion = "25.05";
-}
+        # File management
+        mc
+        yazi
+        xarchiver
+
+        # Network tools
+        networkmanagerapplet
+
+        # Display/Graphics
+        xorg.xeyes  # For testing X11
+
+        # Polkit agent
+        polkit_gnome
+
+        # Catppuccin SDDM theme
+        catppuccin-sddm
+      ];
+
+      # ===== FONTS =====
+
+      fonts.packages = with pkgs; [
+        (nerdfonts.override { fonts = [ "SpaceMono" ]; })
+      ];
+
+      # ===== SHELL CONFIGURATION =====
+
+      # Enable Zsh system-wide but don't make it default
+      programs.zsh.enable = true;
+
+      # Set default editor
+      environment.variables.EDITOR = "nvim";
+
+      # ===== NIX SETTINGS =====
+
+      nix.settings = {
+        experimental-features = [ "nix-command" "flakes" ];
+        auto-optimise-store = true;
+      };
+
+      # Allow unfree packages
+      nixpkgs.config.allowUnfree = true;
+
+      # ===== SYSTEM STATE VERSION =====
+
+      system.stateVersion = "25.05";
+    }
