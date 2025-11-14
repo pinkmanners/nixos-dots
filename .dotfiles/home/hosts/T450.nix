@@ -1,0 +1,380 @@
+# Home-Manager configuration for T450
+# Tinkering/backup machine
+# Supports BOTH Hyprland (Wayland) and LeftWM (X11)
+
+{ config, pkgs, lib, hostname, ... }:
+
+{
+  # Basic home configuration
+  home.username = "jayden";
+  home.homeDirectory = "/home/jayden";
+  home.stateVersion = "25.05";
+
+  # Allow unfree packages for home-manager
+  nixpkgs.config.allowUnfree = true;
+
+  # ===== WINDOW MANAGER CONFIGURATION =====
+  # Import BOTH Wayland/Hyprland AND X11/LeftWM configurations
+  imports = [
+    # Wayland/Hyprland stack
+    ../bin/hyprland/default.nix
+    ../bin/ashell/default.nix
+    ../bin/moxnotify/default.nix
+    
+    # X11/LeftWM stack
+    ../bin/leftwm/default.nix
+    ../bin/xmobar/default.nix
+    ../bin/wired-notify/default.nix
+    
+    # Shared
+    ../bin/rlaunch/default.nix
+    ../bin/kitty/default.nix
+  ];
+
+  # ===== ZSH CONFIGURATION =====
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+
+    # Oh-my-zsh configuration
+    oh-my-zsh = {
+      enable = true;
+      theme = "robbyrussell";
+      plugins = [
+        "git"
+        "yt-dlp"
+        "nix-shell"
+        "nix-zsh-completions"
+      ];
+    };
+
+    # History configuration
+    history = {
+      size = 1000;
+      save = 1000;
+      path = "${config.home.homeDirectory}/.histfile";
+      ignoreAllDups = true;
+    };
+
+    # Environment variables
+    sessionVariables = {
+      EDITOR = "nvim";
+      LANG = "en_US.UTF-8";
+    };
+
+    # FZF with Catppuccin Macchiato colors
+    initExtra = ''
+      # FZF + Catppuccin Macchiato
+      export FZF_DEFAULT_OPTS=" \
+      --color=bg+:#363A4F,bg:#24273A,spinner:#F4DBD6,hl:#ED8796 \
+      --color=fg:#CAD3F5,header:#ED8796,info:#C6A0F6,pointer:#F4DBD6 \
+      --color=marker:#B7BDF8,fg+:#CAD3F5,prompt:#C6A0F6,hl+:#ED8796 \
+      --color=selected-bg:#494D64 \
+      --color=border:#6E738D,label:#CAD3F5"
+
+      # Source zsh-syntax-highlighting Catppuccin theme
+      source ${config.home.homeDirectory}/.config/zsh/catppuccin_macchiato-zsh-syntax-highlighting.zsh
+
+      # Custom settings
+      unsetopt nomatch
+      
+      # Run fastfetch on shell start
+      fastfetch --logo Xenia
+    '';
+
+    # Shell aliases
+    shellAliases = {
+      # Navigation
+      cd.. = "cd ..";
+      
+      # List with lsd
+      lsd = "lsd -l";
+      
+      # Quick commands
+      q = "exit";
+      c = "clear";
+      
+      # NixOS specific
+      flakeUpdate = "nix flake update";
+      rebuildSwitch = "sudo nixos-rebuild switch --flake /home/jayden/.dotfiles/#T450";
+      homeSwitch = "home-manager switch --flake /home/jayden/.dotfiles/#jayden@T450";
+    };
+  };
+
+  # Catppuccin zsh-syntax-highlighting theme file
+  home.file.".config/zsh/catppuccin_macchiato-zsh-syntax-highlighting.zsh".text = ''
+    # Catppuccin Macchiato theme for zsh-syntax-highlighting
+    typeset -gA ZSH_HIGHLIGHT_STYLES
+
+    ZSH_HIGHLIGHT_STYLES[default]='fg=#CAD3F5'
+    ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ED8796'
+    ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#C6A0F6'
+    ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#A6DA95,underline'
+    ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[precommand]='fg=#A6DA95,italic'
+    ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#ED8796'
+    ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#EED49F,italic'
+    ZSH_HIGHLIGHT_STYLES[path]='fg=#EED49F,underline'
+    ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#ED8796,underline'
+    ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#ED8796,underline'
+    ZSH_HIGHLIGHT_STYLES[globbing]='fg=#EED49F'
+    ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#C6A0F6'
+    ZSH_HIGHLIGHT_STYLES[command-substitution]='none'
+    ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]='fg=#F5BDE6'
+    ZSH_HIGHLIGHT_STYLES[process-substitution]='none'
+    ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]='fg=#F5BDE6'
+    ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#EED49F'
+    ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#EED49F'
+    ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='none'
+    ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]='fg=#F5BDE6'
+    ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[rc-quote]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#C6A0F6'
+    ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#C6A0F6'
+    ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=#C6A0F6'
+    ZSH_HIGHLIGHT_STYLES[assign]='none'
+    ZSH_HIGHLIGHT_STYLES[redirection]='fg=#F5BDE6'
+    ZSH_HIGHLIGHT_STYLES[comment]='fg=#5B6078'
+    ZSH_HIGHLIGHT_STYLES[named-fd]='none'
+    ZSH_HIGHLIGHT_STYLES[numeric-fd]='none'
+    ZSH_HIGHLIGHT_STYLES[arg0]='fg=#8AADF4'
+    ZSH_HIGHLIGHT_STYLES[bracket-error]='fg=#ED8796'
+    ZSH_HIGHLIGHT_STYLES[bracket-level-1]='fg=#8AADF4'
+    ZSH_HIGHLIGHT_STYLES[bracket-level-2]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[bracket-level-3]='fg=#EED49F'
+    ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=#C6A0F6'
+    ZSH_HIGHLIGHT_STYLES[bracket-level-5]='fg=#F5BDE6'
+    ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]='standout'
+  '';
+
+  # ===== NEOVIM CONFIGURATION =====
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+    
+    plugins = with pkgs.vimPlugins; [
+      # Theme
+      catppuccin-nvim
+      
+      # Status line
+      vim-airline
+      vim-airline-themes
+      
+      # Kitty integration
+      vim-kitty
+    ];
+
+    extraConfig = ''
+      " Set colors to catppuccin
+      colorscheme catppuccin-macchiato
+      let g:airline_theme = 'catppuccin'
+    '';
+  };
+
+  # ===== GIT CONFIGURATION =====
+  programs.git = {
+    enable = true;
+    userName = "pinkmanners";
+    userEmail = "inbox@pinkmanners.cc";
+  };
+
+  # ===== HOME PACKAGES =====
+  home.packages = with pkgs; [
+    # ==== GAMING & EMULATION ====
+    prismlauncher
+    
+    # ==== MEDIA & CREATIVE ====
+    # Photo/Image tools
+    darktable
+    xnconvert
+    inkscape
+    krita
+    
+    # Video tools
+    media-downloader
+    handbrake
+    mpv
+    
+    # Audio tools
+    strawberry
+    soundconverter
+    
+    # Music streaming
+    tidal-hifi
+    
+    # Media server
+    plexdesktop
+    
+    # ==== UTILITIES ====
+    # Web browser
+    brave
+    
+    # Download tool
+    yt-dlp
+    
+    # Communication
+    telegram-desktop
+    
+    # Archive tools
+    poweriso
+    peazip
+    
+    # Office suite
+    onlyoffice-bin
+    
+    # Note taking
+    logseq
+    
+    # ==== SHARED GUI APPS ====
+    # File managers
+    thunar
+    xarchiver
+    
+    # Terminals
+    terminator
+    
+    # Text editors
+    gedit
+    
+    # Utilities
+    catfish
+    gpick
+    gparted
+    gnome.gnome-disk-utility
+    
+    # VPN
+    mullvad-vpn
+    
+    # Browsers
+    mullvad-browser
+    
+    # Media players
+    rhythmbox
+    tenacity
+    audacity
+    vlc
+    ristretto
+    
+    # Graphics
+    gimp
+    
+    # Document viewer
+    gnome.gnome-font-viewer
+    papers
+    
+    # Text editor
+    eloquent
+    zed-editor
+    
+    # Downloader
+    raider
+    
+    # Password manager
+    bitwarden
+    
+    # Torrent client
+    transmission_4-gtk
+    
+    # Office suite (shared)
+    libreoffice-fresh
+    
+    # Compression
+    p7zip
+    
+    # Video codecs
+    ffmpeg
+  ];
+
+  # ===== GTK THEMING =====
+  gtk = {
+    enable = true;
+    
+    theme = {
+      name = "Catppuccin-Macchiato-Standard-Mauve-Dark";
+      package = pkgs.catppuccin-gtk.override {
+        accents = [ "mauve" ];
+        variant = "macchiato";
+      };
+    };
+    
+    iconTheme = {
+      name = "Flatery-Red-Dark";
+      package = pkgs.flatery-icon-theme;
+    };
+    
+    cursorTheme = {
+      name = "Mocu-White-Left-H";
+      package = pkgs.mocu-cursors;
+      size = 24;
+    };
+    
+    font = {
+      name = "SpaceMono Nerd Font";
+      size = 11;
+    };
+    
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+    
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+  };
+
+  # ===== QT THEMING =====
+  qt = {
+    enable = true;
+    platformTheme.name = "kvantum";
+    style = {
+      name = "kvantum";
+      package = pkgs.catppuccin-kvantum;
+    };
+  };
+
+  # Configure Kvantum
+  home.file.".config/Kvantum/kvantum.kvconfig".text = ''
+    [General]
+    theme=Catppuccin-Macchiato-Mauve
+  '';
+
+  # ===== XDG =====
+  xdg = {
+    enable = true;
+    
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+      desktop = "${config.home.homeDirectory}/Desktop";
+      documents = "${config.home.homeDirectory}/Documents";
+      download = "${config.home.homeDirectory}/Downloads";
+      music = "${config.home.homeDirectory}/Music";
+      pictures = "${config.home.homeDirectory}/Pictures";
+      videos = "${config.home.homeDirectory}/Videos";
+      templates = "${config.home.homeDirectory}/Templates";
+      publicShare = "${config.home.homeDirectory}/Public";
+    };
+    
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "text/html" = "brave-browser.desktop";
+        "x-scheme-handler/http" = "brave-browser.desktop";
+        "x-scheme-handler/https" = "brave-browser.desktop";
+        "x-scheme-handler/about" = "brave-browser.desktop";
+        "x-scheme-handler/unknown" = "brave-browser.desktop";
+        "inode/directory" = "thunar.desktop";
+      };
+    };
+  };
+
+  # ===== PROGRAMS =====
+  # Enable home-manager
+  programs.home-manager.enable = true;
+}
