@@ -38,11 +38,10 @@
     nvidiaSettings = true;
   };
 
-  # Enable OpenGL
-  hardware.opengl = {
+  # Enable graphics (replaces hardware.opengl)
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   # ===== DISPLAY MANAGER =====
@@ -175,6 +174,9 @@
 
     # Catppuccin SDDM theme
     catppuccin-sddm
+
+    # Backlight control
+    light
   ];
 
   # ===== FONTS =====

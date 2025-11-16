@@ -40,12 +40,6 @@
     ];
   };
 
-  # Enable OpenGL
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-  };
-
   # ===== POWER MANAGEMENT (TLP) =====
 
   # Standard TLP defaults for older hardware
@@ -84,6 +78,9 @@
     enable = true;
     displayManager.sessionPackages = [ pkgs.leftwm ];
 
+    # Intel drivers for X11
+    videoDrivers = [ "modesetting" ];
+
     # Desktop environment settings
     desktopManager.xterm.enable = false;
 
@@ -98,7 +95,6 @@
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-    alsa.support32Bit = true;
     pulse.enable = true;
     wireplumber.enable = true;
   };
@@ -186,7 +182,7 @@
     # Network tools
     networkmanagerapplet
 
-    # X11 tools
+    # Display/Graphics
     xorg.xeyes  # For testing X11
 
     # Polkit agent
@@ -194,6 +190,9 @@
 
     # Catppuccin SDDM theme
     catppuccin-sddm
+
+    # Backlight control
+    light
   ];
 
   # ===== FONTS =====

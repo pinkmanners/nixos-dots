@@ -24,10 +24,10 @@
     # X11/LeftWM stack
     ../bin/leftwm/default.nix
     ../bin/xmobar/default.nix
-    ../bin/wired-notify/default.nix
+    ../bin/wired/default.nix
 
     # Shared
-    ../bin/rlaunch/default.nix
+    ../bin/rmenu/default.nix
     ../bin/kitty/default.nix
   ];
 
@@ -52,8 +52,8 @@
 
     # History configuration
     history = {
-      size = 1000;
-      save = 1000;
+      size = 10000;
+      save = 10000;
       path = "${config.home.homeDirectory}/.histfile";
       ignoreAllDups = true;
     };
@@ -106,37 +106,29 @@
   # Catppuccin zsh-syntax-highlighting theme file
   home.file.".config/zsh/catppuccin_macchiato-zsh-syntax-highlighting.zsh".text = ''
     # Catppuccin Macchiato theme for zsh-syntax-highlighting
-    typeset -gA ZSH_HIGHLIGHT_STYLES
-
-    ZSH_HIGHLIGHT_STYLES[default]='fg=#CAD3F5'
+    typeset -A ZSH_HIGHLIGHT_STYLES
     ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ED8796'
     ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#C6A0F6'
-    ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#A6DA95,underline'
-    ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#A6DA95'
-    ZSH_HIGHLIGHT_STYLES[precommand]='fg=#A6DA95,italic'
-    ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#ED8796'
-    ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#EED49F,italic'
-    ZSH_HIGHLIGHT_STYLES[path]='fg=#EED49F,underline'
-    ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#ED8796,underline'
-    ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#ED8796,underline'
-    ZSH_HIGHLIGHT_STYLES[globbing]='fg=#EED49F'
+    ZSH_HIGHLIGHT_STYLES[alias]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[builtin]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[function]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[command]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[precommand]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#F5BDE6'
+    ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=#A6DA95'
+    ZSH_HIGHLIGHT_STYLES[path]='fg=#8AADF4,underline'
+    ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#8AADF4,underline'
+    ZSH_HIGHLIGHT_STYLES[path_approx]='fg=#8AADF4,underline'
+    ZSH_HIGHLIGHT_STYLES[globbing]='fg=#8AADF4'
     ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#C6A0F6'
-    ZSH_HIGHLIGHT_STYLES[command-substitution]='none'
-    ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]='fg=#F5BDE6'
-    ZSH_HIGHLIGHT_STYLES[process-substitution]='none'
-    ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]='fg=#F5BDE6'
     ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#EED49F'
     ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#EED49F'
-    ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='none'
-    ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]='fg=#F5BDE6'
-    ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#A6DA95'
-    ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#A6DA95'
-    ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#A6DA95'
-    ZSH_HIGHLIGHT_STYLES[rc-quote]='fg=#A6DA95'
-    ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#C6A0F6'
-    ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#C6A0F6'
-    ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=#C6A0F6'
-    ZSH_HIGHLIGHT_STYLES[assign]='none'
+    ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#C6A0F6'
+    ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#EED49F'
+    ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#EED49F'
+    ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#8AADF4'
+    ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#8AADF4'
+    ZSH_HIGHLIGHT_STYLES[assign]='fg=#C6A0F6'
     ZSH_HIGHLIGHT_STYLES[redirection]='fg=#F5BDE6'
     ZSH_HIGHLIGHT_STYLES[comment]='fg=#5B6078'
     ZSH_HIGHLIGHT_STYLES[named-fd]='none'
@@ -197,7 +189,6 @@
     krita
 
     # Video tools
-    media-downloader
     handbrake
     mpv
 
@@ -205,11 +196,8 @@
     strawberry
     soundconverter
 
-    # Music streaming
-    tidal-hifi
-
     # Media server
-    plexdesktop
+    plex-desktop
 
     # ==== UTILITIES ====
     # Web browser
@@ -222,7 +210,6 @@
     telegram-desktop
 
     # Archive tools
-    poweriso
     peazip
 
     # Office suite
@@ -246,7 +233,7 @@
     catfish
     gpick
     gparted
-    gnome.gnome-disk-utility
+    gnome-disk-utility
 
     # VPN
     mullvad-vpn
@@ -265,21 +252,17 @@
     gimp
 
     # Document viewer
-    gnome.gnome-font-viewer
-    papers
+    gnome-font-viewer
+    gnome-papers
 
     # Text editor
-    eloquent
     zed-editor
-
-    # Downloader
-    raider
 
     # Password manager
     bitwarden
 
     # Torrent client
-    transmission_4-gtk
+    transmission_4-qt
 
     # Office suite (shared)
     libreoffice-fresh
@@ -297,7 +280,7 @@
 
     theme = {
       name = "Catppuccin-Macchiato-Standard-Mauve-Dark";
-      package = pkgs.magnetic-catppuccin-gtk {
+      package = pkgs.catppuccin-gtk.override {
         accents = [ "mauve" ];
         variant = "macchiato";
       };
@@ -309,7 +292,7 @@
     };
 
     cursorTheme = {
-      name = "Mocu-White-Left-H";
+      name = "Mocu-White-Right-H";
       package = pkgs.mocu-cursors;
       size = 24;
     };
@@ -351,7 +334,6 @@
     userDirs = {
       enable = true;
       createDirectories = true;
-      developer = "${config.home.homeDirectory}/Developer";
       desktop = "${config.home.homeDirectory}/Desktop";
       documents = "${config.home.homeDirectory}/Documents";
       download = "${config.home.homeDirectory}/Downloads";

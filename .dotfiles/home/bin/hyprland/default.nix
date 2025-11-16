@@ -95,13 +95,15 @@
       # Environment Variables
 
       # GTK theme
-      env = GTK_THEME,catppuccin-macchiato-mauve-standard+default
+      env = GTK_THEME,Catppuccin-Macchiato-Standard-Mauve-Dark
 
-      # Cursor settings
-      env = XCURSOR_THEME,Mocu-White-Right-X
-      env = XCURSOR_SIZE,32
+      # Cursor settings for Wayland/Hyprland
       env = HYPRCURSOR_THEME,Mocu-White-Right-H
       env = HYPRCURSOR_SIZE,32
+
+      # Cursor settings for X11/XWayland (use white to match Hyprland)
+      env = XCURSOR_THEME,Mocu-White-Right-X
+      env = XCURSOR_SIZE,32
 
       # Hyprshot location
       env = HYPRSHOT_DIR,$HOME/Pictures/Screenshots
@@ -193,30 +195,15 @@
 
       # Animations
       animations {
-        enabled = yes
+        enabled = true
+        bezier = myBezier, 0.05, 0.9, 0.1, 1.05
 
-        bezier = easeOutQuint, 0.23, 1, 0.32, 1
-        bezier = easeInOutCubic, 0.65, 0.05, 0.36, 1
-        bezier = linear, 0, 0, 1, 1
-        bezier = almostLinear, 0.5, 0.5, 0.75, 1
-        bezier = quick, 0.15, 0, 0.1, 1
-
-        animation = global, 1, 10, default
-        animation = border, 1, 5.39, easeOutQuint
-        animation = windows, 1, 4.79, easeOutQuint
-        animation = windowsIn, 1, 4.1, easeOutQuint, popin 87%
-        animation = windowsOut, 1, 1.49, linear, popin 87%
-        animation = fadeIn, 1, 1.73, almostLinear
-        animation = fadeOut, 1, 1.46, almostLinear
-        animation = fade, 1, 3.03, quick
-        animation = layers, 1, 3.81, easeOutQuint
-        animation = layersIn, 1, 4, easeOutQuint, fade
-        animation = layersOut, 1, 1.5, linear, fade
-        animation = fadeLayersIn, 1, 1.79, almostLinear
-        animation = fadeLayersOut, 1, 1.39, almostLinear
-        animation = workspaces, 1, 1.94, almostLinear, fade
-        animation = workspacesIn, 1, 1.21, almostLinear, fade
-        animation = workspacesOut, 1, 1.94, almostLinear, fade
+        animation = windows, 1, 7, myBezier
+        animation = windowsOut, 1, 7, default, popin 80%
+        animation = border, 1, 10, default
+        animation = borderangle, 1, 8, default
+        animation = fade, 1, 7, default
+        animation = workspaces, 1, 6, default
       }
 
       # Dwindle layout
@@ -230,7 +217,7 @@
         new_status = master
       }
 
-      # Misc settings
+      # Misc
       misc {
         force_default_wallpaper = 0
         disable_hyprland_logo = true
@@ -243,66 +230,55 @@
 
       $mainMod = SUPER
 
-      # Application launching
-      bind = $mainMod, Q, killactive,
-      bind = $mainMod, space, exec, $menu
+      # ===== APPLICATION LAUNCHING =====
       bind = $mainMod, Return, exec, $terminal
+      bind = $mainMod, R, exec, $menu
+      bind = $mainMod, SPACE, exec, $menu
       bind = $mainMod, W, exec, $webBrowser
       bind = $mainMod, E, exec, $fileManager
-      bind = $mainMod, R, exec, $menu
       bind = $mainMod, T, exec, telegram-desktop
       bind = $mainMod, P, exec, logseq
-      bind = CONTROL ALT, P, exec, hyprpicker -a
-      bind = $mainMod, L, exec, hyprlock
       bind = $mainMod, Z, exec, zed
-      bind = $mainMod, N, exec, moxnotify-client -t
 
-      # Screenshots
-      bind = , PRINT, exec, hyprshot -m output --freeze
-      bind = $mainMod, PRINT, exec, hyprshot -m window --freeze
-      bind = $mainMod SHIFT, PRINT, exec, hyprshot -m region --freeze
+      # Close window
+      bind = $mainMod, Q, killactive,
 
-      # System functions
-      bindl = ,switch:off:Lid Switch, exec, hyprlock --immediate && systemctl suspend
-      bind = CONTROL ALT, Delete, exec, $powermenu
+      # Lock screen
+      bind = $mainMod, L, exec, hyprlock
 
-      # Window management
-      bind = $mainMod, slash, togglesplit,
-      bind = $mainMod, period, pseudo,
-      bind = $mainMod, comma, togglefloating,
-      bind = $mainMod, F, fullscreen,
+      # Power menu
+      bind = $mainMod SHIFT, E, exec, $powermenu
 
-      # Focus windows
-      bind = $mainMod, left, movefocus, l
-      bind = $mainMod, right, movefocus, r
-      bind = $mainMod, up, movefocus, u
-      bind = $mainMod, down, movefocus, d
-      bind = $mainMod, h, movefocus, l
-      bind = $mainMod, l, movefocus, r
-      bind = $mainMod, k, movefocus, u
-      bind = $mainMod, j, movefocus, d
+      # Screenshot
+      bind = $mainMod SHIFT, S, exec, hyprshot -m region
+
+      # ===== WINDOW MANAGEMENT =====
+      # Move focus
+      bind = $mainMod, K, movefocus, u
+      bind = $mainMod, J, movefocus, d
+      bind = $mainMod, H, movefocus, l
+      bind = $mainMod, L, movefocus, r
 
       # Move windows
-      bind = $mainMod SHIFT, left, movewindow, l
-      bind = $mainMod SHIFT, right, movewindow, r
-      bind = $mainMod SHIFT, up, movewindow, u
-      bind = $mainMod SHIFT, down, movewindow, d
-      bind = $mainMod SHIFT, h, movewindow, l
-      bind = $mainMod SHIFT, l, movewindow, r
-      bind = $mainMod SHIFT, k, movewindow, u
-      bind = $mainMod SHIFT, j, movewindow, d
+      bind = $mainMod SHIFT, K, movewindow, u
+      bind = $mainMod SHIFT, J, movewindow, d
+      bind = $mainMod SHIFT, H, movewindow, l
+      bind = $mainMod SHIFT, L, movewindow, r
 
-      # Resize windows
-      bind = $mainMod CONTROL, left, resizeactive, -20 0
-      bind = $mainMod CONTROL, right, resizeactive, 20 0
-      bind = $mainMod CONTROL, up, resizeactive, 0 -20
-      bind = $mainMod CONTROL, down, resizeactive, 0 20
-      bind = $mainMod CONTROL, h, resizeactive, -20 0
-      bind = $mainMod CONTROL, l, resizeactive, 20 0
-      bind = $mainMod CONTROL, k, resizeactive, 0 -20
-      bind = $mainMod CONTROL, j, resizeactive, 0 20
+      # Toggle floating
+      bind = $mainMod, V, togglefloating,
 
-      # Workspaces
+      # Toggle fullscreen
+      bind = $mainMod, F, fullscreen,
+
+      # Toggle pseudo-tiling
+      bind = $mainMod, P, pseudo,
+
+      # Toggle split
+      bind = $mainMod, S, togglesplit,
+
+      # ===== WORKSPACE MANAGEMENT =====
+      # Switch to workspace
       bind = $mainMod, 1, workspace, 1
       bind = $mainMod, 2, workspace, 2
       bind = $mainMod, 3, workspace, 3
@@ -388,136 +364,177 @@
       $base = rgb(24273a)
       $mantle = rgb(1e2030)
       $crust = rgb(181926)
+
+      # Alpha variants
+      $rosewaterAlpha = f4dbd6
+      $flamingoAlpha = f0c6c6
+      $pinkAlpha = f5bde6
+      $mauveAlpha = c6a0f6
+      $redAlpha = ed8796
+      $maroonAlpha = ee99a0
+      $peachAlpha = f5a97f
+      $yellowAlpha = eed49f
+      $greenAlpha = a6da95
+      $tealAlpha = 8bd5ca
+      $skyAlpha = 91d7e3
+      $sapphireAlpha = 7dc4e4
+      $blueAlpha = 8aadf4
+      $lavenderAlpha = b7bdf8
+      $textAlpha = cad3f5
+      $subtext1Alpha = b8c0e0
+      $subtext0Alpha = a5adcb
+      $overlay2Alpha = 939ab7
+      $overlay1Alpha = 8087a2
+      $overlay0Alpha = 6e738d
+      $surface2Alpha = 5b6078
+      $surface1Alpha = 494d64
+      $surface0Alpha = 363a4f
+      $baseAlpha = 24273a
+      $mantleAlpha = 1e2030
+      $crustAlpha = 181926
     '';
 
-    # Hyprlock
-    home.file.".config/hypr/hyprlock.conf".text = ''
-        # Hyprlock Configuration
-        # Catppuccin Macchiato
+    # Hyprlock configuration
+    ".config/hypr/hyprlock.conf".text = ''
+      source = $HOME/.config/hypr/macchiato.conf
 
-        general {
-          disable_loading_bar = true
-          hide_cursor = true
-          grace = 0
-          no_fade_in = false
-        }
+      $accent = $mauve
+      $accentAlpha = $mauveAlpha
+      $font = SpaceMono Nerd Font
 
-        background {
-          monitor =
-          path = ~/dotfiles/home/share/wallpapers/mio1.png
-          blur_passes = 2
-          blur_size = 7
-          noise = 0.0117
-          contrast = 0.8916
-          brightness = 0.8172
-          vibrancy = 0.1696
-          vibrancy_darkness = 0.0
-        }
+      # GENERAL
+      general {
+        disable_loading_bar = true
+        hide_cursor = true
+        grace = 0
+        no_fade_in = false
+      }
 
-        # Time
-        label {
-          monitor =
-          text = cmd[update:1000] echo "$(date +"%H:%M")"
-          color = rgba(202, 211, 245, 1.0)
-          font_size = 120
-          font_family = SpaceMono Nerd Font Bold
-          position = 0, 300
-          halign = center
-          valign = center
-        }
+      # BACKGROUND
+      background {
+        monitor =
+        path = $HOME/.dotfiles/home/share/wallpapers/mio1.png
+        blur_passes = 2
+        blur_size = 7
+        noise = 0.0117
+        contrast = 0.8916
+        brightness = 0.8172
+        vibrancy = 0.1696
+        vibrancy_darkness = 0.0
+      }
 
-        # Date
-        label {
-          monitor =
-          text = cmd[update:1000] echo "$(date +"%A, %d %B %Y")"
-          color = rgba(202, 211, 245, 0.8)
-          font_size = 24
-          font_family = SpaceMono Nerd Font
-          position = 0, 200
-          halign = center
-          valign = center
-        }
+      # TIME
+      label {
+        monitor =
+        text = $TIME
+        color = $text
+        font_size = 90
+        font_family = $font
+        position = -30, 0
+        halign = right
+        valign = top
+      }
 
-        # User
-        label {
-          monitor =
-          text = Hi, $USER
-          color = rgba(202, 211, 245, 1.0)
-          font_size = 20
-          font_family = SpaceMono Nerd Font
-          position = 0, -100
-          halign = center
-          valign = center
-        }
+      # DATE
+      label {
+        monitor =
+        text = cmd[update:43200000] date +"%A, %d %B %Y"
+        color = $text
+        font_size = 25
+        font_family = $font
+        position = -30, -150
+        halign = right
+        valign = top
+      }
 
-        # Input field
-        input-field {
-          monitor =
-          size = 300, 50
-          outline_thickness = 1
-          dots_size = 0.2
-          dots_spacing = 0.35
-          dots_center = true
-          outer_color = rgba(125, 196, 228, 1.0)
-          inner_color = rgba(30, 32, 48, 1.0)
-          font_color = rgba(202, 211, 245, 1.0)
-          fade_on_empty = false
-          placeholder_text = <span foreground="##cad3f5">Enter Password...</span>
-          hide_input = false
-          position = 0, -200
-          halign = center
-          valign = center
-        }
+      # USER AVATAR
+      image {
+        monitor =
+        path = $HOME/.face
+        size = 100
+        border_color = $accent
+        position = 0, 75
+        halign = center
+        valign = center
+      }
 
-        # Battery
-        label {
-          monitor =
-          text = cmd[update:5000] echo "bat $(cat /sys/class/power_supply/BAT0/capacity)%"
-          color = rgba(202, 211, 245, 0.8)
-          font_size = 12
-          font_family = SpaceMono Nerd Font
-          position = 20, 20
-          halign = left
-          valign = bottom
-        }
-      '';
+      # INPUT FIELD
+      input-field {
+        monitor =
+        size = 350, 60
+        outline_thickness = 4
+        dots_size = 0.2
+        dots_spacing = 0.2
+        dots_center = true
+        outer_color = $accent
+        inner_color = $surface0
+        font_color = $text
+        fade_on_empty = false
+        placeholder_text = <span foreground="##$textAlpha"><i>󰌾 Logged in as </i><span foreground="##$accentAlpha">$USER</span></span>
+        hide_input = false
+        check_color = $accent
+        fail_color = $red
+        fail_text = <i>$FAIL <b>($ATTEMPTS)</b></i>
+        font_family = $font
+        capslock_color = $yellow
+        position = 0, -47
+        halign = center
+        valign = center
+      }
+    '';
 
-      # Hypridle
-      home.file.".config/hypr/hypridle.conf".text = ''
-          # Hypridle Configuration
+    # Hypridle configuration
+    ".config/hypr/hypridle.conf".text = ''
+      general {
+        lock_cmd = pidof hyprlock || hyprlock       # avoid starting multiple hyprlock instances.
+        before_sleep_cmd = loginctl lock-session    # lock before suspend.
+        after_sleep_cmd = hyprctl dispatch dpms on  # to avoid having to press a key twice to turn on the display.
+      }
 
-          general {
-              lock_cmd = pidof hyprlock || hyprlock       # avoid starting multiple hyprlock instances.
-              before_sleep_cmd = loginctl lock-session    # lock before suspend.
-              after_sleep_cmd = hyprctl dispatch dpms on  # to avoid having to press a key twice to turn on the display.
-          }
+      listener {
+        timeout = 300                                # 5min
+        on-timeout = light -O && light -S 10         # set monitor backlight to minimum, avoid 0 on OLED monitor.
+        on-resume = light -I                         # monitor backlight restore.
+      }
 
-          listener {
-              timeout = 300                                # 5min
-              on-timeout = brightnessctl -s set 10         # set monitor backlight to minimum, avoid 0 on OLED monitor.
-              on-resume = brightnessctl -r                 # monitor backlight restore.
-          }
+      listener {
+        timeout = 420                                 # 7min
+        on-timeout = loginctl lock-session            # lock screen when timeout has passed
+      }
 
-          listener {
-              timeout = 420                                 # 7min
-              on-timeout = loginctl lock-session            # lock screen when timeout has passed
-          }
+      listener {
+        timeout = 510                                                     # 8.5min
+        on-timeout = hyprctl dispatch dpms off                            # screen off when timeout has passed
+        on-resume = hyprctl dispatch dpms on && light -I                  # screen on when activity is detected after timeout has fired.
+      }
 
-          listener {
-              timeout = 510                                                     # 8.5min
-              on-timeout = hyprctl dispatch dpms off                            # screen off when timeout has passed
-              on-resume = hyprctl dispatch dpms on && brightnessctl -r          # screen on when activity is detected after timeout has fired.
-          }
+      listener {
+        timeout = 600                                 # 10min
+        on-timeout = systemctl suspend                # suspend pc
+      }
 
-          listener {
-              timeout = 600                                 # 10min
-              on-timeout = systemctl suspend                # suspend pc
-          }
+      listener {
+        timeout = 610                                 # just after suspend point to ensure brightness is restored
+        on-timeout = light -I
+      }
+    '';
 
-          listener {
-              timeout = 610				# just suspend point to ensure brightness is restored
-              on-timeout = brightnessctl -r
-          }
-        '';
+    # Hyprpaper configuration
+    ".config/hypr/hyprpaper.conf".text = ''
+      preload = ~/.dotfiles/home/share/wallpapers/mio1.png
+      wallpaper = ,~/.dotfiles/home/share/wallpapers/mio1.png
+      splash = false
+    '';
   };
+
+  # Install Hyprland dependencies
+  home.packages = with pkgs; [
+    hyprland
+    hyprpaper
+    hyprpicker
+    hypridle
+    hyprlock
+    hyprshot
+    xdg-desktop-portal-hyprland
+  ];
 }

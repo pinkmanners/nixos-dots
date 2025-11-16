@@ -56,51 +56,43 @@
               (command: CloseWindow, value: "", modifier: ["modkey"], key: "q"),
 
               // Lock screen
-              (command: Execute, value: "i3lock -c 24273a", modifier: ["modkey"], key: "l"),
+              (command: Execute, value: "i3lock-color -c 24273a", modifier: ["modkey"], key: "l"),
 
               // Power menu
-              (command: Execute, value: "rmenu -r powermenu", modifier: ["modkey", "Control"], key: "Delete"),
-
-              // ===== SCREENSHOTS =====
-              (command: Execute, value: "scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/Screenshots/'", modifier: [], key: "Print"),
-              (command: Execute, value: "scrot -u '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/Screenshots/'", modifier: ["modkey"], key: "Print"),
-              (command: Execute, value: "scrot -s '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/Screenshots/'", modifier: ["modkey", "Shift"], key: "Print"),
+              (command: Execute, value: "rmenu -r powermenu", modifier: ["modkey", "Shift"], key: "e"),
 
               // ===== WINDOW MANAGEMENT =====
-              (command: ToggleFloating, value: "", modifier: ["modkey"], key: "comma"),
-              (command: ToggleScratchPad, value: "Alacritty", modifier: ["modkey"], key: "grave"),
-
-              // Focus windows
+              // Move focus
               (command: FocusWindowUp, value: "", modifier: ["modkey"], key: "k"),
               (command: FocusWindowDown, value: "", modifier: ["modkey"], key: "j"),
-              (command: FocusWindowUp, value: "", modifier: ["modkey"], key: "Up"),
-              (command: FocusWindowDown, value: "", modifier: ["modkey"], key: "Down"),
+              (command: FocusWindowLeft, value: "", modifier: ["modkey"], key: "h"),
+              (command: FocusWindowRight, value: "", modifier: ["modkey"], key: "l"),
 
               // Move windows
               (command: MoveWindowUp, value: "", modifier: ["modkey", "Shift"], key: "k"),
               (command: MoveWindowDown, value: "", modifier: ["modkey", "Shift"], key: "j"),
-              (command: MoveWindowTop, value: "", modifier: ["modkey", "Shift"], key: "Return"),
-              (command: MoveWindowUp, value: "", modifier: ["modkey", "Shift"], key: "Up"),
-              (command: MoveWindowDown, value: "", modifier: ["modkey", "Shift"], key: "Down"),
+              (command: MoveWindowLeft, value: "", modifier: ["modkey", "Shift"], key: "h"),
+              (command: MoveWindowRight, value: "", modifier: ["modkey", "Shift"], key: "l"),
 
-              // Resize windows
-              (command: IncreaseMainWidth, value: "5", modifier: ["modkey", "Control"], key: "l"),
-              (command: DecreaseMainWidth, value: "5", modifier: ["modkey", "Control"], key: "h"),
-              (command: IncreaseMainWidth, value: "5", modifier: ["modkey", "Control"], key: "Right"),
-              (command: DecreaseMainWidth, value: "5", modifier: ["modkey", "Control"], key: "Left"),
+              // Toggle floating
+              (command: ToggleFloating, value: "", modifier: ["modkey"], key: "v"),
 
-              // ===== WORKSPACE/TAG MANAGEMENT =====
-              (command: GotoTag, value: "1", modifier: ["modkey"], key: "1"),
-              (command: GotoTag, value: "2", modifier: ["modkey"], key: "2"),
-              (command: GotoTag, value: "3", modifier: ["modkey"], key: "3"),
-              (command: GotoTag, value: "4", modifier: ["modkey"], key: "4"),
-              (command: GotoTag, value: "5", modifier: ["modkey"], key: "5"),
-              (command: GotoTag, value: "6", modifier: ["modkey"], key: "6"),
-              (command: GotoTag, value: "7", modifier: ["modkey"], key: "7"),
-              (command: GotoTag, value: "8", modifier: ["modkey"], key: "8"),
-              (command: GotoTag, value: "9", modifier: ["modkey"], key: "9"),
+              // Toggle fullscreen
+              (command: ToggleFullScreen, value: "", modifier: ["modkey"], key: "f"),
 
-              // Move window to tag
+              // ===== WORKSPACE MANAGEMENT =====
+              // Switch to workspace
+              (command: GoToTag, value: "1", modifier: ["modkey"], key: "1"),
+              (command: GoToTag, value: "2", modifier: ["modkey"], key: "2"),
+              (command: GoToTag, value: "3", modifier: ["modkey"], key: "3"),
+              (command: GoToTag, value: "4", modifier: ["modkey"], key: "4"),
+              (command: GoToTag, value: "5", modifier: ["modkey"], key: "5"),
+              (command: GoToTag, value: "6", modifier: ["modkey"], key: "6"),
+              (command: GoToTag, value: "7", modifier: ["modkey"], key: "7"),
+              (command: GoToTag, value: "8", modifier: ["modkey"], key: "8"),
+              (command: GoToTag, value: "9", modifier: ["modkey"], key: "9"),
+
+              // Move window to workspace
               (command: MoveToTag, value: "1", modifier: ["modkey", "Shift"], key: "1"),
               (command: MoveToTag, value: "2", modifier: ["modkey", "Shift"], key: "2"),
               (command: MoveToTag, value: "3", modifier: ["modkey", "Shift"], key: "3"),
@@ -111,9 +103,12 @@
               (command: MoveToTag, value: "8", modifier: ["modkey", "Shift"], key: "8"),
               (command: MoveToTag, value: "9", modifier: ["modkey", "Shift"], key: "9"),
 
-              // ===== SYSTEM FUNCTIONS =====
+              // ===== LEFTWM CONTROLS =====
+              // Reload LeftWM
               (command: SoftReload, value: "", modifier: ["modkey", "Shift"], key: "r"),
-              (command: Execute, value: "loginctl kill-session $XDG_SESSION_ID", modifier: ["modkey", "Shift"], key: "e"),
+
+              // Quit LeftWM
+              (command: Execute, value: "loginctl kill-session $XDG_SESSION_ID", modifier: ["modkey", "Shift"], key: "q"),
           ],
       )
     '';
@@ -138,7 +133,7 @@
       pkill -f wired
 
       # Set wallpaper with feh
-      feh --bg-scale ~/dotfiles/home/share/wallpapers/mio2.png &
+      feh --bg-scale ~/.dotfiles/home/share/wallpapers/mio2.png &
 
       # Start xmobar status bar
       xmobar ~/.config/xmobar/xmobarrc &
@@ -183,4 +178,11 @@
     chmod +x ~/.config/leftwm/themes/catppuccin-macchiato/up
     chmod +x ~/.config/leftwm/themes/catppuccin-macchiato/down
   '';
+
+  # Install dependencies
+  home.packages = with pkgs; [
+    leftwm
+    feh          # Wallpaper setter
+    i3lock-color # Lock screen
+  ];
 }

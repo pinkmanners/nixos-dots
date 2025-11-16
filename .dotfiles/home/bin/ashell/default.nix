@@ -106,126 +106,61 @@
   '';
 
   home.file.".config/ashell/style.css".text = ''
-    /* Ashell CSS Theme - Catppuccin Macchiato */
-
+    /* Catppuccin Macchiato Theme */
     * {
-      font-family: "SpaceMono Nerd Font";
-      font-size: 12px;
       border: none;
       border-radius: 0;
+      font-family: "SpaceMono Nerd Font";
+      font-size: 12px;
       min-height: 0;
     }
 
-    window#ashell {
-      background: rgba(36, 39, 58, 0.95);
-      border-radius: 12px;
-      border: 1px solid #363a4f;
-    }
-
-    /* Workspaces */
-    #workspaces {
-      padding: 0 5px;
-      margin: 0 5px;
+    window#waybar {
+      background: #24273a;
+      color: #cad3f5;
+      border-radius: 7px;
     }
 
     #workspaces button {
-      padding: 0 8px;
+      padding: 0 10px;
       color: #cad3f5;
       background: transparent;
-      border-radius: 8px;
-      margin: 4px 2px;
+      border-radius: 5px;
+    }
+
+    #workspaces button.active {
+      background: #363a4f;
+      color: #ed8796;
     }
 
     #workspaces button:hover {
       background: #363a4f;
-      color: #cad3f5;
     }
 
-    #workspaces button.active {
-      background: #494d64;
-      color: #ed8796;
-    }
-
-    #workspaces button.urgent {
-      background: #ed8796;
-      color: #24273a;
-    }
-
-    /* Clock */
-    #clock {
-      padding: 0 10px;
-      color: #cad3f5;
-      font-weight: bold;
-    }
-
-    /* System modules */
+    #clock,
+    #battery,
     #cpu,
     #memory,
     #network,
     #pulseaudio,
-    #battery,
+    #tray,
     #language {
       padding: 0 10px;
       margin: 0 2px;
-      color: #cad3f5;
-      background: transparent;
-    }
-
-    #cpu {
-      color: #8aadf4;
-    }
-
-    #cpu.critical {
-      color: #ed8796;
-    }
-
-    #memory {
-      color: #c6a0f6;
-    }
-
-    #memory.critical {
-      color: #ed8796;
-    }
-
-    #network {
-      color: #a6da95;
-    }
-
-    #network.disconnected {
-      color: #ee99a0;
-    }
-
-    #pulseaudio {
-      color: #7dc4e4;
-    }
-
-    #pulseaudio.muted {
-      color: #5b6078;
-    }
-
-    #battery {
-      color: #eed49f;
+      background: #363a4f;
+      border-radius: 5px;
     }
 
     #battery.charging {
       color: #a6da95;
     }
 
-    #battery.warning {
-      color: #f5a97f;
+    #battery.warning:not(.charging) {
+      color: #eed49f;
     }
 
-    #battery.critical {
+    #battery.critical:not(.charging) {
       color: #ed8796;
-    }
-
-    #language {
-      color: #f5bde6;
-    }
-
-    /* System tray */
-    #tray {
-      padding: 0 10px;
     }
 
     #tray > .passive {
@@ -237,4 +172,9 @@
       background-color: #ed8796;
     }
   '';
+
+  # Install ashell
+  home.packages = with pkgs; [
+    ashell
+  ];
 }

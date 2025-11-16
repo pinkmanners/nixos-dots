@@ -41,13 +41,6 @@
     ];
   };
 
-  # Enable OpenGL
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-  };
-
   # ===== POWER MANAGEMENT (TLP) =====
 
   # Balanced profile: Performance on AC, Power-saving on Battery
@@ -73,40 +66,34 @@
       # Runtime PM for PCI(e) devices
       RUNTIME_PM_ON_AC = "on";
       RUNTIME_PM_ON_BAT = "auto";
+
+      # Disk settings
+      DISK_IDLE_SECS_ON_AC = 0;
+      DISK_IDLE_SECS_ON_BAT = 2;
+
+      # Battery charge thresholds
+      START_CHARGE_THRESH_BAT0 = 75;
+      STOP_CHARGE_THRESH_BAT0 = 80;
     };
   };
 
   # ===== DISPLAY MANAGER =====
 
-  # SDDM - supports both X11 and Wayland
+  # SDDM with Wayland support (for Hyprland)
   services.displayManager.sddm = {
     enable = true;
-    wayland.enable = true;  # Supports both X11 and Wayland sessions
+    wayland.enable = true;
     theme = "catppuccin-macchiato";
   };
 
-  # X11 with LeftWM
+  # Enable both Hyprland and X11
+  programs.hyprland.enable = true;
+
   services.xserver = {
     enable = true;
     displayManager.sessionPackages = [ pkgs.leftwm ];
-
-    # Desktop environment settings
     desktopManager.xterm.enable = false;
-
-    # Keyboard layout
     xkb.layout = "us";
-  };
-
-  # Hyprland from nixpkgs
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
-
-  # XDG Desktop Portal
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
   # ===== AUDIO =====
@@ -203,15 +190,21 @@
     # Network tools
     networkmanagerapplet
 
+    # Wayland utilities
+    wl-clipboard
+    cliphist
+
     # Display/Graphics
     xorg.xeyes  # For testing X11
-    wl-clipboard  # For Wayland clipboard
 
     # Polkit agent
     polkit_gnome
 
     # Catppuccin SDDM theme
     catppuccin-sddm
+
+    # Backlight control
+    light
   ];
 
   # ===== FONTS =====
