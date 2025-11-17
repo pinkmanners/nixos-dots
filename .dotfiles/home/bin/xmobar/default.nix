@@ -1,13 +1,9 @@
-# Xmobar Configuration
-# Status bar for X11 with LeftWM
-# Replicates Waybar layout and Catppuccin Macchiato theme
-
 { config, pkgs, lib, hostname, ... }:
 
 {
   home.file.".config/xmobar/xmobarrc".text = ''
     Config {
-      -- Appearance
+      -- appearance
       font = "SpaceMono Nerd Font Mono 10"
       , bgColor = "#24273a"
       , fgColor = "#cad3f5"
@@ -15,18 +11,18 @@
       , border = BottomB
       , borderColor = "#363a4f"
 
-      -- Layout
+      -- layout
       , sepChar = "%"
       , alignSep = "}{"
       , template = " %StdinReader% }{ %cpu% | %memory% | %dynnetwork% | %alsa:default:Master% | %battery% | %date% "
 
-      -- Plugins
+      -- plugins
       , commands =
           [
-            -- Workspaces from LeftWM
+            -- workspaces from LeftWM
             Run StdinReader
 
-            -- CPU usage
+            -- cpu
             , Run Cpu
               [ "-t", "cpu <total>%"
               , "-L", "50"
@@ -36,7 +32,7 @@
               , "--high", "#ed8796"
               ] 20
 
-            -- Memory usage
+            -- ram
             , Run Memory
               [ "-t", "mem <usedratio>%"
               , "-L", "50"
@@ -46,7 +42,7 @@
               , "--high", "#ed8796"
               ] 20
 
-            -- Network
+            -- net
             , Run DynNetwork
               [ "-t", "net <rx>KB"
               , "-L", "1000"
@@ -56,7 +52,7 @@
               , "--high", "#ed8796"
               ] 20
 
-            -- Volume
+            -- volume
             , Run Alsa "default" "Master"
               [ "-t", "vol <volume>%"
               , "--"
@@ -66,7 +62,7 @@
               , "-C", "#7dc4e4"
               ]
 
-            -- Battery
+            -- battery
             , Run BatteryP ["BAT0"]
               [ "-t", "bat <left>%"
               , "-L", "20"
@@ -80,15 +76,14 @@
               , "-o", ""
               ] 50
 
-            -- Date and time
-            , Run Date "%H:%M - %a, %d %b %Y" "date" 10
+            -- date n time
+            , Run Date "%a, %d %b – %H:%M" "date" 10
           ]
       }
   '';
 
-  # Install xmobar
   home.packages = with pkgs; [
     xmobar
-    alsa-utils  # For volume control
+    alsa-utils
   ];
 }

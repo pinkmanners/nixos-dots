@@ -1,34 +1,30 @@
-# Wired Configuration
-# Notification daemon for X11
-# Catppuccin Macchiato theme
-
 { config, pkgs, lib, ... }:
 
 {
   home.file.".config/wired/wired.ron".text = ''
     (
-      // Notification timeout in milliseconds
+      // notification timeout in milliseconds
       timeout: 5000,
 
-      // Poll rate for checking notifications
+      // poll rate for checking notifications
       poll_interval: 16,
 
-      // Idle threshold before closing
+      // idle threshold before closing
       idle_threshold: 5000,
 
-      // Maximum number of notifications
+      // maximum number of notifications
       max_notifications: 5,
 
-      // Notification position
+      // notification position
       anchor: TopRight,
 
-      // Offset from edge
+      // offset from edge
       offset: (
         x: 10,
         y: 42,
       ),
 
-      // Notification layout
+      // notification layout
       layout_blocks: [
         (
           name: "root",
@@ -86,7 +82,6 @@
     )
   '';
 
-  # Install wired
   home.packages = with pkgs; [
     wired
   ];

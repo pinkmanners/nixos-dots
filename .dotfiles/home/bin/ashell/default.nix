@@ -1,7 +1,3 @@
-# Ashell Configuration
-# Status bar for Wayland/Hyprland
-# Replaces Waybar with similar layout and Catppuccin Macchiato theme
-
 { config, pkgs, lib, ... }:
 
 {
@@ -60,13 +56,13 @@
       "cpu": {
         "format": "cpu {usage}%",
         "interval": 2,
-        "on-click": "kitty -e btop"
+        "on-click": "alacritty -e btop"
       },
 
       "memory": {
         "format": "mem {percentage}%",
         "interval": 2,
-        "on-click": "kitty -e btop"
+        "on-click": "alacritty -e btop"
       },
 
       "battery": {
@@ -173,7 +169,6 @@
     }
   '';
 
-  # Install ashell
   home.packages = with pkgs; [
     ashell
   ];

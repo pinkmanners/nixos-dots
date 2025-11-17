@@ -1,12 +1,8 @@
-# Hyprland Configuration
-# Wayland compositor with dynamic tiling
-# Migrated from Fedora dots with updated dependencies
-
 { config, pkgs, lib, hostname, ... }:
 
 {
   home.file = {
-    # Main Hyprland config
+    # main hyprland config
     ".config/hypr/hyprland.conf".text = ''
       # Hyprland Configuration
       # Catppuccin Macchiato Theme
@@ -22,7 +18,7 @@
       source = ~/.config/hypr/macchiato.conf
     '';
 
-    # Monitor configuration
+    # monitor configuration
     ".config/hypr/monitors.conf".text =
       if hostname == "L14" then ''
         # L14 Monitor Configuration
@@ -43,18 +39,18 @@
         monitor=,preferred,auto,1
       '';
 
-    # Default programs
+    # default programs
     ".config/hypr/defaultPrograms.conf".text = ''
       # Default Programs
 
-      $terminal = kitty
+      $terminal = alacritty
       $menu = rmenu -r drun
       $webBrowser = brave
-      $fileManager = thunar
+      $fileManager = dolphin
       $powermenu = rmenu -r powermenu
     '';
 
-    # Autostart applications
+    # autostart applications
     ".config/hypr/autoStart.conf".text = ''
       # Autostart Applications
 
@@ -67,17 +63,11 @@
       # Notification daemon
       exec-once = moxnotify
 
-      # Polkit agent
-      exec-once = ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
-
       # Network manager applet
       exec-once = nm-applet
 
       # Automounting
       exec-once = udiskie --tray
-
-      # GNOME Keyring
-      exec-once = gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 
       # Clipboard manager
       exec-once = wl-paste --type text --watch cliphist store
@@ -90,7 +80,7 @@
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
     '';
 
-    # Environment variables
+    # environment variables
     ".config/hypr/environmentVariables.conf".text = ''
       # Environment Variables
 
@@ -120,7 +110,7 @@
       env = ELECTRON_OZONE_PLATFORM_HINT,wayland
     '';
 
-    # Permissions
+    # permissions
     ".config/hypr/permissions.conf".text = ''
       # Permissions and XWayland
 
@@ -129,7 +119,7 @@
       }
     '';
 
-    # Variables (general settings, input, decoration, animations)
+    # variables (general settings, input, decoration, animations)
     ".config/hypr/variables.conf".text = ''
       # Hyprland Variables
 
@@ -224,7 +214,7 @@
       }
     '';
 
-    # Keybindings
+    # keybindings
     ".config/hypr/keybindings.conf".text = ''
       # Keybindings
 
@@ -321,7 +311,7 @@
       bind = , XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
     '';
 
-    # Workspace and window rules
+    # workspace and window rules
     ".config/hypr/workspacesWindows.conf".text = ''
       # Workspace Rules
 
@@ -334,7 +324,7 @@
       workspace = 1, default:true
     '';
 
-    # Catppuccin Macchiato colors
+    # catppuccin cacchiato colors
     ".config/hypr/macchiato.conf".text = ''
       # Catppuccin Macchiato Color Scheme
 
@@ -394,7 +384,7 @@
       $crustAlpha = 181926
     '';
 
-    # Hyprlock configuration
+    # hyprlock
     ".config/hypr/hyprlock.conf".text = ''
       source = $HOME/.config/hypr/macchiato.conf
 
@@ -483,7 +473,7 @@
       }
     '';
 
-    # Hypridle configuration
+    # hypridle
     ".config/hypr/hypridle.conf".text = ''
       general {
         lock_cmd = pidof hyprlock || hyprlock       # avoid starting multiple hyprlock instances.
@@ -519,7 +509,7 @@
       }
     '';
 
-    # Hyprpaper configuration
+    # hyprpaper
     ".config/hypr/hyprpaper.conf".text = ''
       preload = ~/.dotfiles/home/share/wallpapers/mio1.png
       wallpaper = ,~/.dotfiles/home/share/wallpapers/mio1.png
@@ -527,7 +517,6 @@
     '';
   };
 
-  # Install Hyprland dependencies
   home.packages = with pkgs; [
     hyprland
     hyprpaper
@@ -536,5 +525,7 @@
     hyprlock
     hyprshot
     xdg-desktop-portal-hyprland
+    nwg-displays
+    nwg-look
   ];
 }

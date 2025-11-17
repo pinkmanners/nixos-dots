@@ -1,7 +1,3 @@
-# Moxnotify Configuration
-# Notification daemon for Wayland/Hyprland
-# Catppuccin Macchiato theme
-
 { config, pkgs, lib, ... }:
 
 {
@@ -54,7 +50,6 @@
     foreground = "#ed8796"
   '';
 
-  # Install moxnotify
   home.packages = with pkgs; [
     moxnotify
   ];

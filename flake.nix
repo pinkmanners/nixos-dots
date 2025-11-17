@@ -1,11 +1,10 @@
 {
-  description = "Multi-host NixOS configuration with home-manager";
+  description = "baked in a buttery, cripsy, flake uwu";
 
   inputs = {
-    # Using nixos-25.05 release branch for stability
+    # we enjoy stability in this house
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 
-    # Home-manager following the same release branch
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,23 +13,23 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
-      # System architecture - all your hosts are x86_64-linux
+      # what is an arm? i only have 2 of those
       system = "x86_64-linux";
 
-      # Import overlays for custom packages
+      # muh overlays
       overlays = [
-        # Flatery icon theme overlay
+        # flatery icon theme
         (final: prev: {
           flatery-icon-theme = final.callPackage ./home/share/icons/flatery/default.nix { };
         })
 
-        # Mocu cursor theme overlay
+        # mocu cursor theme
         (final: prev: {
           mocu-cursors = final.callPackage ./home/share/cursors/mocu/default.nix { };
         })
       ];
 
-      # Function to create nixosConfiguration for a given hostname
+      # func -> create nixosConfiguration for X hostname
       mkHost = hostname: nixpkgs.lib.nixosSystem {
         inherit system;
 
@@ -39,16 +38,14 @@
         };
 
         modules = [
-          # Apply overlays to nixpkgs
           { nixpkgs.overlays = overlays; }
 
-          # Host-specific configuration
           ./configs/${hostname}/configuration.nix
           ./configs/${hostname}/hardware-configuration.nix
         ];
       };
 
-      # Function to create home-manager configuration for a given hostname
+      # func -> create home-manager configuration for X hostname
       mkHome = hostname: home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
 
@@ -57,16 +54,15 @@
         };
 
         modules = [
-          # Apply overlays to home-manager's pkgs
+          # apply overlays
           { nixpkgs.overlays = overlays; }
 
-          # Host-specific home configuration
+          # in my home configs
           ./home/hosts/${hostname}.nix
         ];
       };
 
     in {
-      # NixOS system configurations
       nixosConfigurations = {
         BarkBox = mkHost "BarkBox";
         E5430 = mkHost "E5430";
@@ -75,7 +71,6 @@
         X61 = mkHost "X61";
       };
 
-      # Home-manager configurations
       homeConfigurations = {
         "jayden@BarkBox" = mkHome "BarkBox";
         "jayden@E5430" = mkHome "E5430";
@@ -84,7 +79,6 @@
         "jayden@X61" = mkHome "X61";
       };
 
-      # Development shells for rust and ruby
       devShells.${system} = {
         rust = import ./home/dev/rust.nix { pkgs = nixpkgs.legacyPackages.${system}; };
         ruby = import ./home/dev/ruby.nix { pkgs = nixpkgs.legacyPackages.${system}; };

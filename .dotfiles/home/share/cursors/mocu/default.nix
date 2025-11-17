@@ -1,12 +1,9 @@
-{ lib
-, stdenvNoCC
-}:
+{ lib, stdenvNoCC}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mocu-cursors";
   version = "custom";
 
-  # Placeholder - you'll add your custom cursor files to these directories
   src = ./src;
 
   dontBuild = true;
@@ -16,7 +13,6 @@ stdenvNoCC.mkDerivation rec {
 
     mkdir -p $out/share/icons
 
-    # Install Hyprcursor variants (for Wayland/Hyprland)
     if [ -d "hyprcursor" ]; then
       echo "Installing Hyprcursor themes..."
       for theme in hyprcursor/Mocu-*; do
@@ -28,7 +24,6 @@ stdenvNoCC.mkDerivation rec {
       done
     fi
 
-    # Install XCursor variants (for X11/LeftWM)
     if [ -d "xcursor" ]; then
       echo "Installing XCursor themes..."
       for theme in xcursor/Mocu-*; do
@@ -40,7 +35,6 @@ stdenvNoCC.mkDerivation rec {
       done
     fi
 
-    # Ensure proper permissions
     find $out/share/icons -type f -exec chmod 644 {} \;
     find $out/share/icons -type d -exec chmod 755 {} \;
 
@@ -48,9 +42,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Mocu custom cursor themes for Hyprland and X11";
-    license = licenses.unfree; # Adjust based on your cursor license
-    platforms = platforms.linux;
-    maintainers = [ ];
+    description = "Mocu cursor themes for Hyprland and X11";
+    homepage = "https://github.com/sevmeyer/mocu-xcursor";
   };
 }

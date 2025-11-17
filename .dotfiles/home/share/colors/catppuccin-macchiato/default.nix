@@ -1,8 +1,5 @@
-# Catppuccin Macchiato Color Palette
-# Source: https://catppuccin.com/palette/
-
 {
-  # Base colors
+  # base colors
   rosewater = "#f4dbd6";
   flamingo = "#f0c6c6";
   pink = "#f5bde6";
@@ -17,21 +14,21 @@
   sapphire = "#7dc4e4";
   blue = "#8aadf4";
   lavender = "#b7bdf8";
-  
-  # Text colors
+
+  # text colors
   text = "#cad3f5";
   subtext1 = "#b8c0e0";
   subtext0 = "#a5adcb";
-  
-  # Surface colors
+
+  # surface colors
   overlay2 = "#939ab7";
   overlay1 = "#8087a2";
   overlay0 = "#6e738d";
   surface2 = "#5b6078";
   surface1 = "#494d64";
   surface0 = "#363a4f";
-  
-  # Base/background colors
+
+  # base/background colors
   base = "#24273a";
   mantle = "#1e2030";
   crust = "#181926";
