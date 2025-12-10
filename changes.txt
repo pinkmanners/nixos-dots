@@ -1,3 +1,0 @@
-swap gnome-keyring for kwallet
-swap polkit-gnome for polkit-kde
-swap most gtk apps for qt equivlents
