@@ -1,0 +1,137 @@
+{ config, lib, pkgs, ... }:
+
+{
+  home.packages = with pkgs; [
+    kdePackages.konsole
+  ];
+
+  home.file.".local/share/konsole/Catppuccin-Macchiato.colorscheme".text = ''
+    [Background]
+    Color=36,39,58
+
+    [BackgroundFaint]
+    Color=36,39,58
+
+    [BackgroundIntense]
+    Color=36,39,58
+
+    [Color0]
+    Color=110,115,141
+
+    [Color0Faint]
+    Color=110,115,141
+
+    [Color0Intense]
+    Color=110,115,141
+
+    [Color1]
+    Color=237,135,150
+
+    [Color1Faint]
+    Color=237,135,150
+
+    [Color1Intense]
+    Color=237,135,150
+
+    [Color2]
+    Color=166,218,149
+
+    [Color2Faint]
+    Color=166,218,149
+
+    [Color2Intense]
+    Color=166,218,149
+
+    [Color3]
+    Color=238,212,159
+
+    [Color3Faint]
+    Color=238,212,159
+
+    [Color3Intense]
+    Color=238,212,159
+
+    [Color4]
+    Color=138,173,244
+
+    [Color4Faint]
+    Color=138,173,244
+
+    [Color4Intense]
+    Color=138,173,244
+
+    [Color5]
+    Color=198,160,246
+
+    [Color5Faint]
+    Color=198,160,246
+
+    [Color5Intense]
+    Color=198,160,246
+
+    [Color6]
+    Color=145,215,227
+
+    [Color6Faint]
+    Color=145,215,227
+
+    [Color6Intense]
+    Color=145,215,227
+
+    [Color7]
+    Color=202,211,245
+
+    [Color7Faint]
+    Color=202,211,245
+
+    [Color7Intense]
+    Color=202,211,245
+
+    [Foreground]
+    Color=202,211,245
+
+    [ForegroundFaint]
+    Color=202,211,245
+
+    [ForegroundIntense]
+    Color=202,211,245
+
+    [General]
+    Blur=false
+    ColorRandomization=false
+    Description=Catppuccin Macchiato
+    Opacity=1
+    Wallpaper=
+  '';
+
+  home.file.".local/share/konsole/Catppuccin-Macchiato.profile".text = ''
+    [Appearance]
+    ColorScheme=Catppuccin-Macchiato
+    Font=SpaceMono Nerd Font,12,-1,5,50,0,0,0,0,0,Regular
+
+    [General]
+    Name=Catppuccin-Macchiato
+    Parent=FALLBACK/
+
+    [Scrolling]
+    HistoryMode=2
+    HistorySize=10000
+    ScrollBarPosition=2
+
+    [Terminal Features]
+    BlinkingCursorEnabled=false
+    FlowControlEnabled=false
+  '';
+
+  home.file.".config/konsolerc".text = ''
+    [Desktop Entry]
+    DefaultProfile=Catppuccin-Macchiato.profile
+
+    [MainWindow]
+    MenuBar=Disabled
+    ToolBarsMovable=Disabled
+
+    [TabBar]
+    TabBarPosition=Top
+  '';
+}
