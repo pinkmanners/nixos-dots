@@ -1,0 +1,12 @@
+// default apps
+mimeapps list
+
+// git
+lazygit config
+
+// terminal multiplexer
+zellij config?
+
+    layouts = {
+      xyz
+    };
